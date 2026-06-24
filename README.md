@@ -1,27 +1,18 @@
 # AI Kuaida Prototype
 
-Static review site for the AI Kuaida RFP/DDQ prototype.
+Static prototype for the AI Kuaida RFP/DDQ knowledge-library and questionnaire workflow platform.
 
-## Access
+## Preview Access
 
-This prototype is intended for invited reviewers only.
+The page uses a lightweight client-side access gate.
 
 - Access password: `AIKuaida-Review-8068`
-- The page uses a lightweight client-side access gate.
-- The page is marked `noindex,nofollow` to discourage search engine indexing.
+- The site is marked `noindex,nofollow` to discourage search engine indexing.
+- This is suitable for controlled prototype review, not for storing confidential production data.
 
 ## GitHub Pages
 
-This repository deploys the current static prototype to GitHub Pages through GitHub Actions.
+This folder can be deployed directly with GitHub Pages. The included workflow publishes the repository root to GitHub Pages after each push to `main`.
 
-The deployment workflow pulls the static assets from the existing Vercel prototype and publishes them as a GitHub Pages artifact.
+Recommended repository visibility: private, if your GitHub plan supports the sharing model you need.
 
-Expected Pages URL after deployment:
-
-```text
-https://ellapanai.github.io/ai-kuaida-app/
-```
-
-## Privacy Note
-
-GitHub Pages is static hosting. The password prompt is useful for controlled prototype review, but it is not enterprise-grade authentication. Do not place real client confidential data in this static prototype.
