@@ -1,0 +1,703 @@
+﻿<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex" />
+    <title>AI Kuaida | Recommendation Engines and Knowledge Hub</title>
+    <style>
+      html.ai-auth-locked body {
+        visibility: hidden;
+      }
+    </style>
+    <script>
+      document.documentElement.classList.add("ai-auth-locked");
+    </script>
+    <script src="./auth-gate.js"></script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <svg aria-hidden="true" class="icon-sprite">
+      <symbol id="icon-dashboard" viewBox="0 0 24 24">
+        <path d="M3 13h8V3H3v10Zm0 8h8v-6H3v6Zm10 0h8V11h-8v10Zm0-18v6h8V3h-8Z" />
+      </symbol>
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M6 2h9l5 5v15H6V2Zm8 1.8V8h4.2L14 3.8ZM8 11h8v1.8H8V11Zm0 4h8v1.8H8V15Z" />
+      </symbol>
+      <symbol id="icon-library" viewBox="0 0 24 24">
+        <path d="M4 4h5v16H4V4Zm7 0h5v16h-5V4Zm7.2 1.2 3.8 14.3-1.9.5-3.8-14.3 1.9-.5Z" />
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="M9.2 16.6 4.9 12.3l-1.4 1.4 5.7 5.7L21 7.6l-1.4-1.4L9.2 16.6Z" />
+      </symbol>
+      <symbol id="icon-risk" viewBox="0 0 24 24">
+        <path d="M12 2 1.8 21h20.4L12 2Zm1 15h-2v-2h2v2Zm0-4h-2V8h2v5Z" />
+      </symbol>
+      <symbol id="icon-export" viewBox="0 0 24 24">
+        <path d="M13 3v10.2l3.6-3.6L18 11l-6 6-6-6 1.4-1.4 3.6 3.6V3h2ZM5 19h14v2H5v-2Z" />
+      </symbol>
+      <symbol id="icon-ai" viewBox="0 0 24 24">
+        <path d="M12 2 14 8l6 2-6 2-2 6-2-6-6-2 6-2 2-6Zm6 13 1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3ZM5 15l.8 2.2L8 18l-2.2.8L5 21l-.8-2.2L2 18l2.2-.8L5 15Z" />
+      </symbol>
+      <symbol id="icon-office" viewBox="0 0 24 24">
+        <path d="M4 3h16v18H4V3Zm2 2v14h12V5H6Zm2 3h8v2H8V8Zm0 4h8v2H8v-2Z" />
+      </symbol>
+      <symbol id="icon-search" viewBox="0 0 24 24">
+        <path d="M10.5 4a6.5 6.5 0 0 1 5.2 10.4l4 4-1.4 1.4-4-4A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" />
+      </symbol>
+    </svg>
+
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <div class="brand">
+          <div class="brand-mark">AI</div>
+          <div>
+            <strong>AI Kuaida</strong>
+            <span>Recommendation Engines</span>
+          </div>
+        </div>
+
+        <nav class="side-nav" aria-label="Primary navigation">
+          <button class="nav-item" data-module="library">
+            <svg class="icon"><use href="#icon-library"></use></svg>
+            Knowledge & Library Hub
+          </button>
+          <button class="nav-item active" data-module="workspace">
+            <svg class="icon"><use href="#icon-dashboard"></use></svg>
+            Recommendation Engines
+          </button>
+          <button class="nav-item" data-module="settings">
+            <svg class="icon"><use href="#icon-check"></use></svg>
+            Settings / Admin
+          </button>
+        </nav>
+
+        <div class="sidebar-foot">
+          <span class="env-dot"></span>
+          Local demonstration environment
+        </div>
+      </aside>
+
+      <main class="app-main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Global Securities & Fund Services</p>
+            <h1>Recommendation Engines and Knowledge & Library Hub</h1>
+          </div>
+          <div class="top-actions">
+            <label class="file-button" title="Import TXT or CSV">
+              <svg class="icon"><use href="#icon-file"></use></svg>
+              Import
+              <input id="fileInput" type="file" accept=".txt,.csv,.md,.doc,.docx,.xls,.xlsx,.pdf" />
+            </label>
+            <button id="generateAllBtn" class="primary">
+              <svg class="icon"><use href="#icon-ai"></use></svg>
+              Generate Draft
+            </button>
+            <button id="exportWordBtn" title="Export Word-compatible file">
+              <svg class="icon"><use href="#icon-export"></use></svg>
+              Word
+            </button>
+            <button id="exportExcelBtn" title="Export Excel-compatible CSV">
+              <svg class="icon"><use href="#icon-export"></use></svg>
+              Excel
+            </button>
+            <button id="sendClientBtn" title="Generate client email draft">
+              <svg class="icon"><use href="#icon-export"></use></svg>
+              Send
+            </button>
+          </div>
+        </header>
+        <div id="moduleSubnav" class="module-subnav" aria-label="Module sub-navigation"></div>
+
+        <section id="workspaceDashboard" class="view active">
+          <div class="metric-grid" id="workspaceKpis"></div>
+          <div class="workspace-dashboard-grid">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Recommendation Engines</p>
+                  <h2>Questionnaire Project Portfolio</h2>
+                </div>
+              </div>
+              <div id="questionnairePortfolio" class="portfolio-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Controls</p>
+                  <h2>SLA, Ownership and Risk Summary</h2>
+                </div>
+              </div>
+              <div id="workspaceSlaPanel" class="sla-panel"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="workflowSetup" class="view">
+          <div class="workflow-setup-grid">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Workflow Setup / Assignment Setup</p>
+                  <h2>Workflow Template and Assignment Setup</h2>
+                </div>
+                <span id="workflowModeBadge" class="stage-pill">Standard Workflow</span>
+              </div>
+              <div class="workflow-builder-body">
+                <div id="workflowModeCards" class="mode-card-grid"></div>
+                <label class="workflow-select-label">
+                  <span>Workflow Template</span>
+                  <select id="workflowTemplateSelect"></select>
+                </label>
+                <div id="workflowBuilderStages" class="workflow-stage-list"></div>
+              </div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Workflow Stage Library</p>
+                  <h2>Stage Component Library</h2>
+                </div>
+                <button id="saveWorkflowTemplateBtn">Save as Template</button>
+              </div>
+              <div id="stageLibraryList" class="stage-library-list"></div>
+            </section>
+          </div>
+          <section class="panel workflow-template-panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Workflow Templates</p>
+                <h2>Template Management</h2>
+              </div>
+            </div>
+            <div id="workflowTemplateTable" class="export-list"></div>
+          </section>
+        </section>
+
+        <section id="assignments" class="view">
+          <div class="assignment-stack">
+            <div id="assignmentTabs" class="assignment-tabs"></div>
+            <div class="metric-grid" id="assignmentKpis"></div>
+            <div class="split-layout assignment-main-grid">
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">Workflow Stage Progress</p>
+                    <h2>Stage Progress</h2>
+                  </div>
+                </div>
+                <div id="stageProgressTable" class="export-list"></div>
+              </section>
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">Export Readiness</p>
+                    <h2>Pre-export Checks</h2>
+                  </div>
+                  <span id="exportReadinessBadge" class="stage-pill">Checking</span>
+                </div>
+                <div id="exportReadinessPanel" class="readiness-list"></div>
+              </section>
+            </div>
+            <div class="split-layout assignment-main-grid">
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">Section Assignment View</p>
+                    <h2>Section Assignment Progress</h2>
+                  </div>
+                </div>
+                <div id="sectionAssignmentTable" class="export-list"></div>
+              </section>
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">People / Reviewer Workload</p>
+                    <h2>People Workload</h2>
+                  </div>
+                </div>
+                <div id="reviewerWorkloadTable" class="export-list"></div>
+              </section>
+            </div>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Re-assignment Tracker</p>
+                  <h2>Re-assignment Tracker</h2>
+                </div>
+                <button id="simulateReassignBtn">Re-assign Reviewer</button>
+              </div>
+              <div id="reassignmentTracker" class="export-list"></div>
+              <div id="reassignmentRulesPanel" class="reassign-rule-grid"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="myQuestionnaires" class="view">
+          <div class="split-layout my-work-grid">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">My Questionnaires</p>
+                  <h2>My Questionnaires</h2>
+                </div>
+                <span class="stage-pill">Role: Operator / SME</span>
+              </div>
+              <div id="myQuestionnaireList" class="portfolio-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">My Tasks</p>
+                  <h2>My Tasks</h2>
+                </div>
+              </div>
+              <div id="myTaskList" class="task-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="workbench" class="view">
+          <div class="metric-grid" id="metricGrid"></div>
+
+          <div class="workspace-grid">
+            <section class="panel project-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">Recommendation Engine Workbench</p>
+                  <h2>Alpha Securities DDQ 2026</h2>
+                </div>
+                <span id="projectStage" class="stage-pill">In Review</span>
+              </div>
+              <div id="workbenchSummary" class="workbench-summary"></div>
+              <div class="progress-shell">
+                <div class="progress-head">
+                  <span>Overall Progress</span>
+                  <strong id="progressText">0%</strong>
+                </div>
+                <div class="progress-bar"><span id="progressBar"></span></div>
+              </div>
+              <div class="workbench-actions">
+                <label class="file-button">
+                  <svg class="icon"><use href="#icon-file"></use></svg>
+                  Upload / Import
+                  <input type="file" accept=".txt,.csv,.md,.doc,.docx,.xls,.xlsx,.pdf" />
+                </label>
+                <button class="primary" id="workbenchGenerateBtn"><svg class="icon"><use href="#icon-ai"></use></svg>Generate Draft</button>
+                <button id="workbenchReviewBtn"><svg class="icon"><use href="#icon-check"></use></svg>Send to SME</button>
+                <button id="workbenchQualityBtn"><svg class="icon"><use href="#icon-risk"></use></svg>Run Quality Check</button>
+                <button id="workbenchSearchLibraryBtn"><svg class="icon"><use href="#icon-search"></use></svg>Search Hub</button>
+                <button id="workbenchFindBetterBtn"><svg class="icon"><use href="#icon-search"></use></svg>Find Better Answer</button>
+              </div>
+              <div id="workbenchStatusBar" class="process-timeline compact"></div>
+            </section>
+
+            <section class="panel table-panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Recommendation Engine Workbench</p>
+                  <h2>Question Recommendation Queue</h2>
+                </div>
+                <div class="search-box">
+                  <svg class="icon"><use href="#icon-search"></use></svg>
+                  <input id="questionSearch" type="search" placeholder="Search questions, tags or owner" />
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table class="question-table">
+                  <thead>
+                    <tr>
+                      <th>Question ID</th>
+                      <th>Question</th>
+                      <th>Detected Topic</th>
+                      <th>Best Match Source</th>
+                      <th>Source Type</th>
+                      <th>Suggested Answer</th>
+                      <th>Historical Match</th>
+                      <th>Historical Similarity</th>
+                      <th>Historical Answer Date</th>
+                      <th>Knowledge Validation</th>
+                      <th>Best Answer Source</th>
+                      <th>Suggested Action</th>
+                      <th>Difference Flag</th>
+                      <th>Review Required</th>
+                      <th>Confidence</th>
+                      <th>Risk</th>
+                      <th>Owner / SME</th>
+                      <th>Review Status</th>
+                      <th>Hashtags</th>
+                      <th>Last Review</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="questionRows"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="panel inspector" id="inspector"></aside>
+          </div>
+          <div class="matching-dashboard">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Historical Match Summary</p>
+                  <h2>Historical Questionnaire Match Summary</h2>
+                </div>
+                <button id="reviewComparisonBtn">Review Comparison</button>
+              </div>
+              <div id="historicalMatchSummary" class="historical-match-grid"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Auto-fill Progress</p>
+                  <h2>Auto-fill Progress</h2>
+                </div>
+                <button id="autofillRecommendedBtn">Auto-fill Recommended Answers</button>
+              </div>
+              <div id="autofillProgress" class="autofill-grid"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Questionnaire Difference Report</p>
+                  <h2>New vs Historical Questionnaire Difference Report</h2>
+                </div>
+              </div>
+              <div id="differenceReport" class="difference-report"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Contextual Knowledge Search</p>
+                  <h2>Current Question Knowledge Search</h2>
+                </div>
+                <button id="askLibraryBtn">Ask Knowledge Hub</button>
+              </div>
+              <div class="library-search-row">
+                <input id="contextLibrarySearchInput" type="search" placeholder="Search the current question in the Knowledge Hub..." />
+                <button id="contextLibrarySearchBtn">Search Hub</button>
+              </div>
+              <div id="contextLibrarySearchResults" class="search-results"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="library" class="view">
+          <div class="library-dashboard-stack">
+            <section class="panel library-search-hero">
+              <div>
+                <p class="eyebrow">Knowledge Hub Search</p>
+                <h2>Find the best approved content-first answer</h2>
+              </div>
+              <div class="library-search-row hero">
+                <input id="globalLibrarySearchInput" type="search" placeholder="Paste a client question, or search by theme, topic, product, market, source or hashtag..." />
+                <button id="globalLibrarySearchBtn" class="primary"><svg class="icon"><use href="#icon-search"></use></svg>Search Hub</button>
+              </div>
+              <div id="globalLibrarySearchResults" class="search-results"></div>
+            </section>
+            <div class="metric-grid" id="libraryKpis"></div>
+            <div class="library-dashboard-grid">
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">Content Governance</p>
+                    <h2>Knowledge Health Dashboard</h2>
+                  </div>
+                </div>
+                <div id="libraryChartPanel" class="library-chart-panel"></div>
+              </section>
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">Health Overview</p>
+                    <h2>Health Overview</h2>
+                  </div>
+                </div>
+                <div id="contentHealth" class="health-grid"></div>
+              </section>
+            </div>
+            <div class="library-dashboard-grid">
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">Topic Coverage</p>
+                    <h2>Topic Coverage</h2>
+                  </div>
+                </div>
+                <div id="libraryTopicCoverage" class="theme-list"></div>
+              </section>
+              <section class="panel">
+                <div class="panel-head compact">
+                  <div>
+                    <p class="eyebrow">Governance Rules</p>
+                    <h2>Governance Rules and Review Calendar</h2>
+                  </div>
+                </div>
+                <div id="libraryGovernanceRules" class="governance-list"></div>
+                <div id="reviewCalendar" class="review-calendar"></div>
+              </section>
+            </div>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Priority Review Queue</p>
+                  <h2>Priority Review Queue</h2>
+                </div>
+                <div class="search-box">
+                  <svg class="icon"><use href="#icon-search"></use></svg>
+                  <input id="librarySearch" type="search" placeholder="Search topics, sources or tags" />
+                </div>
+              </div>
+              <div id="libraryList" class="library-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="goldenSource" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Sources</p>
+                <h2>Evidence Layer for Approved Answers</h2>
+              </div>
+              <span class="stage-pill">Official / Public Source</span>
+            </div>
+            <div id="goldenSourceList" class="source-library-grid"></div>
+          </section>
+        </section>
+
+        <section id="smeReviewed" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Approved Answers</p>
+                <h2>Reusable Standard Answers</h2>
+              </div>
+              <span class="stage-pill">Reviewed Answer</span>
+            </div>
+            <div id="smeReviewedList" class="source-library-grid"></div>
+          </section>
+        </section>
+
+        <section id="completedLibrary" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Historical Questionnaires</p>
+                <h2>Historical Reuse, Mapping and Auto-fill Library</h2>
+              </div>
+              <span class="stage-pill">Historical Questionnaires</span>
+            </div>
+            <div id="completedQuestionnaireList" class="completed-list"></div>
+          </section>
+        </section>
+
+        <section id="approvals" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">SME Review Queue</p>
+                <h2>Manual Review Queue</h2>
+              </div>
+              <button id="bulkReviewBtn">
+                <svg class="icon"><use href="#icon-check"></use></svg>
+                Bulk submitted for review
+              </button>
+            </div>
+            <div id="approvalBoard" class="approval-board"></div>
+          </section>
+        </section>
+
+        <section id="risk" class="view">
+          <div class="split-layout">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Risk Center</p>
+                  <h2>High-risk Questions</h2>
+                </div>
+              </div>
+              <div id="riskList" class="risk-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Risk Signals</p>
+                  <h2>Risk Signals</h2>
+                </div>
+              </div>
+              <div id="riskSignalList" class="rule-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="office" class="view">
+          <div class="office-grid">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Export Center</p>
+                  <h2>Export and Writeback Centre</h2>
+                </div>
+                <span id="officeReady" class="stage-pill">Ready</span>
+              </div>
+              <div id="officeMatrix" class="export-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Preview</p>
+                  <h2>Client Submission Version</h2>
+                </div>
+              </div>
+              <div id="submissionPreview" class="submission-preview"></div>
+            </section>
+          </div>
+          <section class="panel export-writeback-panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">AFME Template Writeback</p>
+                <h2>AFME Template Writeback Fields and Internal Audit Columns</h2>
+              </div>
+            </div>
+            <div id="afmeFields" class="field-list"></div>
+          </section>
+        </section>
+
+        <section id="governance" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Hashtag Dictionary</p>
+                <h2>Tag Dictionary</h2>
+              </div>
+            </div>
+            <div id="hashtagTaxonomy" class="governance-list"></div>
+          </section>
+        </section>
+
+        <section id="dictionaries" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Dropdown Dictionaries</p>
+                <h2>Dropdown Field Dictionaries</h2>
+              </div>
+            </div>
+            <div id="dropdownDictionaries" class="dictionary-grid"></div>
+          </section>
+        </section>
+
+        <section id="statusConfig" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Status Configuration</p>
+                <h2>Status Configuration</h2>
+              </div>
+            </div>
+            <div id="statusConfigurationList" class="governance-list"></div>
+          </section>
+        </section>
+
+        <section id="workflowRules" class="view">
+          <div class="governance-stack">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Workflow Rules</p>
+                  <h2>Workflow Rules</h2>
+                </div>
+              </div>
+              <div id="governanceFlow" class="flow-strip"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Governance Reference</p>
+                  <h2>Governance Rules Reference</h2>
+                </div>
+              </div>
+              <div id="governancePlan" class="governance-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="qualityRules" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Quality & Risk Rules</p>
+                <h2>Quality and Risk Rules</h2>
+              </div>
+            </div>
+            <div id="ruleList" class="rule-list"></div>
+          </section>
+        </section>
+
+        <section id="model" class="view">
+          <div class="split-layout">
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Data Model</p>
+                  <h2>Core Entity Model</h2>
+                </div>
+              </div>
+              <div id="entityModel" class="entity-list"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Relationship & Status</p>
+                  <h2>Relationship and Status Model</h2>
+                </div>
+              </div>
+              <div id="relationshipModel" class="governance-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="notifications" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Email Automation</p>
+                <h2>Email Reminder Settings</h2>
+              </div>
+              <button id="sendReminderBtn">
+                <svg class="icon"><use href="#icon-export"></use></svg>
+                Generate Email
+              </button>
+            </div>
+            <div id="notificationList" class="notification-list"></div>
+          </section>
+        </section>
+
+        <section id="roles" class="view">
+          <section class="panel">
+            <div class="panel-head compact">
+              <div>
+                <p class="eyebrow">Access Model</p>
+                <h2>Roles and Permissions</h2>
+              </div>
+            </div>
+            <div id="roleMatrix" class="role-grid"></div>
+          </section>
+        </section>
+
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./hsbc-afme-data.js"></script>
+    <script src="./data-model.js"></script>
+    <script src="./governance-config.js"></script>
+    <script src="./workflow-config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
+
