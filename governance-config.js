@@ -1,0 +1,181 @@
+window.AI_KUAIDA_GOVERNANCE = {
+  flowSteps: [
+    {
+      id: "01",
+      title: "Upload Questionnaire",
+      detail: "An operator uploads the client Word, Excel or PDF file; the system records file name, client, market, questionnaire type and file-level hashtags.",
+      output: "Source file + file metadata",
+    },
+    {
+      id: "02",
+      title: "Semantic Search",
+      detail: "The parser extracts questions, sections, coordinates and context, then retrieves Approved or In Review candidate answers from the knowledge library.",
+      output: "Question queue + matched sources",
+    },
+    {
+      id: "03",
+      title: "Draft Generation",
+      detail: "Generates an AI Draft from matched answers, source type, risk rules and client context, then writes confidence and risk tags.",
+      output: "Draft answer + confidence + risk",
+    },
+    {
+      id: "04",
+      title: "SME Review",
+      detail: "The system assigns Owners and SMEs by topic and risk; SMEs add comments, return or approve.",
+      output: "Review comments + status change",
+    },
+    {
+      id: "05",
+      title: "Signoff",
+      detail: "High-risk, external-source and low-confidence content must complete sign-off; the sign-off record enters the audit trail.",
+      output: "Approved answer + signoff trail",
+    },
+    {
+      id: "06",
+      title: "Export and Delivery",
+      detail: "Exports Word, AFME Excel writeback version, answer matrix and client email draft.",
+      output: "Client package + internal audit package",
+    },
+  ],
+  sourceTypes: [
+    {
+      name: "Internal Approved",
+      usePolicy: "May be used as the preferred answer source, subject to project-level SME sign-off.",
+      reviewCycleDays: 180,
+      riskRule: "Mandatory review is required where regulation, client money, data security or digital assets are involved.",
+    },
+    {
+      name: "Internal Draft",
+      usePolicy: "May only generate drafts and must not be submitted directly to clients.",
+      reviewCycleDays: 60,
+      riskRule: "Defaults to In Review.",
+    },
+    {
+      name: "External Reliable",
+      usePolicy: "May be used for public facts and background explanation; SME confirmation is required before client submission.",
+      reviewCycleDays: 120,
+      riskRule: "Must not replace internal policies, contractual terms or audit evidence.",
+    },
+    {
+      name: "Client Specific",
+      usePolicy: "Restricted to the relevant client or project.",
+      reviewCycleDays: 90,
+      riskRule: "Cross-client reuse requires Legal and Compliance approval.",
+    },
+    {
+      name: "Evidence Attachment",
+      usePolicy: "Used as answer evidence attachment or audit reference, not to generate responses directly.",
+      reviewCycleDays: 365,
+      riskRule: "Check confidentiality level, validity period and disclosure scope.",
+    },
+  ],
+  lifecycle: [
+    ["Draft", "Newly created or imported content without completed Owner/SME review."],
+    ["In Review", "Submitted to SME, Legal, Compliance or InfoSec for review."],
+    ["Approved", "Available for questionnaire responses, subject to project-level sign-off."],
+    ["Expired", "Past the review date and not permitted for direct client submission."],
+    ["Retired", "No longer applicable; retained for audit history only."],
+  ],
+  reviewRules: [
+    {
+      trigger: "Next review date <= 45 days",
+      action: "Remind the Owner/SME to review.",
+      channel: "System reminder plus email draft",
+    },
+    {
+      trigger: "Confidence < 55%",
+      action: "Mark as Draft - SME review required.",
+      channel: "Red warning in Recommendation Workbench",
+    },
+    {
+      trigger: "High risk tag",
+      action: "Require Legal, Compliance or InfoSec review.",
+      channel: "Risk Centre plus approval queue",
+    },
+    {
+      trigger: "External Reliable source",
+      action: "Internal confirmation is required before client submission.",
+      channel: "Answer source tag plus sign-off gate",
+    },
+    {
+      trigger: "Expired content matched",
+      action: "Prevent automatic writeback to the final version.",
+      channel: "Health dashboard plus pre-export checks",
+    },
+  ],
+  healthModel: [
+    {
+      factor: "Average Confidence",
+      weight: "45%",
+      formula: "Average(content confidence)",
+    },
+    {
+      factor: "Approved Content Ratio",
+      weight: "35%",
+      formula: "Approved items / total items",
+    },
+    {
+      factor: "Review Timeliness",
+      weight: "20%",
+      formula: "(Total - due for review) / total",
+    },
+  ],
+  hashtagTaxonomy: [
+    {
+      level: "File Level",
+      examples: ["#Client:Alpha", "#Market:HK", "#Template:AFME2026", "#Type:DDQ", "#Received:2026Q2"],
+      use: "Project grouping, batch processing and template fingerprint identification.",
+    },
+    {
+      level: "Question Level",
+      examples: ["#Section:RiskMitigation", "#QuestionType:Confirmation", "#Mandatory", "#Owner:InfoSec"],
+      use: "Assign Owner, calculate section coverage and identify mandatory items.",
+    },
+    {
+      level: "Answer Level",
+      examples: ["#Source:InternalApproved", "#Status:Approved", "#Confidence:High", "#Reusable"],
+      use: "Control whether an answer is reusable and whether SME review is required.",
+    },
+    {
+      level: "Evidence Level",
+      examples: ["#Evidence:SOC1", "#Policy:InfoSec2026", "#Attachment:BCPTest", "#Disclosure:Restricted"],
+      use: "Manage evidence attachments, confidentiality level and disclosure scope.",
+    },
+    {
+      level: "Risk Level",
+      examples: ["#Risk:High", "#LegalReview", "#ComplianceReview", "#Privacy", "#ClientMoney", "#DigitalAssets"],
+      use: "Trigger mandatory review, pre-export checks and audit records.",
+    },
+  ],
+  afmeWritebackFields: [
+    ["answer", "Original AFME Answer column", "Client-visible draft or final answer"],
+    ["Owner", "New column", "Responsible Owner / SME"],
+    ["confidence", "New column", "Semantic matching plus source quality less risk deductions"],
+    ["Review Status", "New column", "Draft / In Review / Approved / Signed off"],
+    ["Review Record", "New column", "SME comments, sign-off time and return reason"],
+    ["Internal Source Type", "Internal audit version field", "Internal Approved / External Reliable / Client Specific"],
+    ["Matched KB ID", "Internal audit version field", "Matched knowledge library item ID"],
+    ["Risk Tags", "Internal audit version field", "High-risk rules, review gates and sensitive topics"],
+    ["Evidence Links", "Internal audit version field", "Policies, audit reports and attachment references"],
+    ["Parser Coordinates", "Internal audit version field", "Sheet / Row / Column / Word paragraph"],
+  ],
+  dropdowns: {
+    status: ["Draft", "In Review", "Changes Required", "Approved", "Signed off", "Expired", "Retired"],
+    riskLevels: ["Low", "Medium", "High", "Critical"],
+    sourceTypes: ["Internal Approved", "Internal Draft", "External Reliable", "Client Specific", "Evidence Attachment"],
+    roles: ["System Admin", "Operator", "SME", "Legal", "Compliance", "InfoSec", "Client Manager"],
+    themes: [
+      "Credentials",
+      "Asset safety and custody",
+      "Core services",
+      "Custody questions",
+      "Client money",
+      "Risk mitigation",
+      "Your systems",
+      "Data protection",
+      "Financial crime",
+      "Operational resilience",
+    ],
+    reminderRules: ["Review due in 45 days", "Overdue review", "SME pending > 3 days", "High risk unanswered", "Low confidence matched", "External source used"],
+  },
+};
