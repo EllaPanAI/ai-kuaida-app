@@ -1,0 +1,64 @@
+(function () {
+  var storageKey = "ai-kuaida-prototype-access-v2";
+  var passwordHash =
+    "f23c9c154cadf3f1f533780dbc6e2c84640fd4a995f31cd9a163eb03bdd702c3";
+
+  function unlock() {
+    try {
+      window.sessionStorage.setItem(storageKey, "granted");
+    } catch (error) {
+      // Continue for the current tab if session storage is unavailable.
+    }
+    document.documentElement.classList.remove("ai-auth-locked");
+  }
+
+  function deny() {
+    document.open();
+    document.write(
+      '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
+        '<meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">' +
+        '<title>AI Kuaida Prototype - Restricted</title>' +
+        '<style>body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;color:#172033;display:grid;place-items:center;min-height:100vh}.box{width:min(520px,calc(100vw - 40px));background:#fff;border:1px solid #dbe3ef;border-radius:12px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.12)}h1{margin:0 0 10px;font-size:24px}p{margin:0;color:#64748b;line-height:1.6}button{margin-top:18px;border:0;border-radius:8px;background:#2563eb;color:#fff;padding:10px 14px;font-weight:700;cursor:pointer}</style>' +
+        '</head><body><main class="box"><h1>Restricted preview</h1><p>This AI Kuaida prototype is intended for invited reviewers only. Please reload the page and enter the correct access password.</p><button onclick="location.reload()">Enter password again</button></main></body></html>'
+    );
+    document.close();
+  }
+
+  function sha256Hex(value) {
+    if (!window.crypto || !window.crypto.subtle || !window.TextEncoder) {
+      return Promise.resolve("");
+    }
+    return window.crypto.subtle
+      .digest("SHA-256", new TextEncoder().encode(value))
+      .then(function (buffer) {
+        return Array.prototype.map
+          .call(new Uint8Array(buffer), function (byte) {
+            return byte.toString(16).padStart(2, "0");
+          })
+          .join("");
+      });
+  }
+
+  try {
+    if (window.sessionStorage.getItem(storageKey) === "granted") {
+      unlock();
+      return;
+    }
+  } catch (error) {
+    // Ignore and ask for password.
+  }
+
+  var input = window.prompt(
+    "AI Kuaida Prototype - Restricted Access\nPlease enter the access password:"
+  );
+
+  sha256Hex(input || "")
+    .then(function (hash) {
+      if (hash === passwordHash) {
+        unlock();
+      } else {
+        deny();
+      }
+    })
+    .catch(deny);
+})();
